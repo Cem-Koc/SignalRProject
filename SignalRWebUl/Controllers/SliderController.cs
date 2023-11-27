@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using SignalRWebUl.Dtos.FeatureDtos;
+using SignalRWebUl.Dtos.SliderDtos;
 using System.Text;
 
 namespace SignalRWebUl.Controllers
 {
-	public class FeatureController : Controller
+	public class SliderController : Controller
 	{
 		private readonly IHttpClientFactory _httpClientFactory;
 
-		public FeatureController(IHttpClientFactory httpClientFactory)
+		public SliderController(IHttpClientFactory httpClientFactory)
 		{
 			_httpClientFactory = httpClientFactory;
 		}
@@ -17,29 +17,29 @@ namespace SignalRWebUl.Controllers
 		public async Task<IActionResult> Index()
 		{
 			var client = _httpClientFactory.CreateClient();
-			var responseMessage = await client.GetAsync("https://localhost:7114/api/Feature");
+			var responseMessage = await client.GetAsync("https://localhost:7114/api/Sliders");
 			if (responseMessage.IsSuccessStatusCode)
 			{
 				var jsonData = await responseMessage.Content.ReadAsStringAsync();
-				var values = JsonConvert.DeserializeObject<List<ResultFeatureDto>>(jsonData);
+				var values = JsonConvert.DeserializeObject<List<ResultSliderDto>>(jsonData);
 				return View(values);
 			}
 			return View();
 		}
 
 		[HttpGet]
-		public IActionResult CreateFeature()
+		public IActionResult CreateSlider()
 		{
 			return View();
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreateFeature(CreateFeatureDto createFeatureDto)
+		public async Task<IActionResult> CreateSlider(CreateSliderDto createSliderDto)
 		{
 			var client = _httpClientFactory.CreateClient();
-			var jsonDate = JsonConvert.SerializeObject(createFeatureDto);
+			var jsonDate = JsonConvert.SerializeObject(createSliderDto);
 			StringContent stringContent = new StringContent(jsonDate, Encoding.UTF8, "application/json");
-			var responseMessage = await client.PostAsync("https://localhost:7114/api/Feature", stringContent);
+			var responseMessage = await client.PostAsync("https://localhost:7114/api/Sliders", stringContent);
 			if (responseMessage.IsSuccessStatusCode)
 			{
 				return RedirectToAction("Index");
@@ -47,10 +47,10 @@ namespace SignalRWebUl.Controllers
 			return View();
 		}
 
-		public async Task<IActionResult> DeleteFeature(int id)
+		public async Task<IActionResult> DeleteSlider(int id)
 		{
 			var client = _httpClientFactory.CreateClient();
-			var responseMessage = await client.DeleteAsync($"https://localhost:7114/api/Feature/{id}");
+			var responseMessage = await client.DeleteAsync($"https://localhost:7114/api/Sliders/{id}");
 			if (responseMessage.IsSuccessStatusCode)
 			{
 				return RedirectToAction("Index");
@@ -59,26 +59,26 @@ namespace SignalRWebUl.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> UpdateFeature(int id)
+		public async Task<IActionResult> UpdateSlider(int id)
 		{
 			var client = _httpClientFactory.CreateClient();
-			var responseMessage = await client.GetAsync($"https://localhost:7114/api/Feature/{id}");
+			var responseMessage = await client.GetAsync($"https://localhost:7114/api/Sliders/{id}");
 			if (responseMessage.IsSuccessStatusCode)
 			{
 				var jsonData = await responseMessage.Content.ReadAsStringAsync();
-				var values = JsonConvert.DeserializeObject<UpdateFeatureDto>(jsonData);
+				var values = JsonConvert.DeserializeObject<UpdateSliderDto>(jsonData);
 				return View(values);
 			}
 			return View();
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> UpdateFeature(UpdateFeatureDto updateFeatureDto)
+		public async Task<IActionResult> UpdateSlider(UpdateSliderDto updateSliderDto)
 		{
 			var client = _httpClientFactory.CreateClient();
-			var jsonData = JsonConvert.SerializeObject(updateFeatureDto);
+			var jsonData = JsonConvert.SerializeObject(updateSliderDto);
 			StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-			var responseMessage = await client.PutAsync("https://localhost:7114/api/Feature/", stringContent);
+			var responseMessage = await client.PutAsync("https://localhost:7114/api/Sliders/", stringContent);
 			if (responseMessage.IsSuccessStatusCode)
 			{
 				return RedirectToAction("Index");
